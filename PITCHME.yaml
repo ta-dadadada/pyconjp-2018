@@ -1,0 +1,10 @@
+theme : night
+layout : center
+transition : none
+highlight : ir-black
+charts : true
+mathjax : TeX-AMS_HTML-full
+published : true
+slide-number: true
+logo: pycon/assets/img/ES-Logo-White.png
+logo-position : top-right
