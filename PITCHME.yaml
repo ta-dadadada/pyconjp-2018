@@ -6,5 +6,5 @@ charts : true
 mathjax : TeX-AMS_HTML-full
 published : true
 slide-number: true
-logo: pycon/assets/img/ES-Logo-White.png
+logo: assets/img/ES-Logo-White.png
 logo-position : top-right

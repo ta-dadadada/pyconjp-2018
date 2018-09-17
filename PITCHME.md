@@ -1,5 +1,10 @@
 ## diff 最小化原理で導く Zen of Python
 
+@snap[south]
+Pycon JP (2018-09-18)<br>
+（株）いい生活 多田 吉克
+@snapend
+
 ---
 
 ## 自己紹介
@@ -25,7 +30,7 @@ diff を減らして **良い** コードを書こう
 * OCP
   * 最小作用の原理
 * diff
-* Zen
+* Zen of Python
 
 ---
 
@@ -34,8 +39,7 @@ diff を減らして **良い** コードを書こう
 * **開放/閉鎖原則**
 * オブジェクト指向やデザインパターンの根底にある設計原理
 
-> モジュールは拡張に対して開いて (Open) おり，修正に対して閉じて (Closed)いなければならない
-> Bertrand Meyer
+@quote[モジュールは拡張に対して開いて （Open） おり，修正に対して閉じて （Closed）いなければならない](Bertrand Meyer)
 
 ---
 
@@ -91,9 +95,11 @@ predictor.predict(X_test)
 
 ---
 
-### 最小作用の原理
-
+@snap[north]
+**最小作用の原理**
+<br>
 「作用（≠力）」を最小化する軌跡が実現するという力学の原理
+@snapend
 
 @snap[south-west]
 <img src="img/phase_space.jpg" width="40%">
@@ -247,15 +253,12 @@ def get_profile(user_id):
 
 ## Zen of Python にたどり着く
 
+
+Tim Peters 氏が示した Python 設計 19 の指針
+
 ```python
 import this
 ```
-
----
-
-### Zen of Python ってなんだっけ？
-
-Tim Peters 氏が示した Python 設計 19 の指針
 
 ---
 
