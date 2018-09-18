@@ -19,7 +19,7 @@ Pycon JP (2018-09-18)<br>
 
 ### Talk Theme
 
-diff を減らして **良い** コードを書こう
+diff を減らして **いいコード** を書こう
 
 * Pythonic なコードをかくための――好ましくはたったひとつの――さえたやり方
 
@@ -162,16 +162,16 @@ from flask import (
 ### 早期リターン①
 
 ```py
-for d in data:
-    if d:
-        do_something1(d)
-        do_something2(d)
+def do_all(data)
+    if data:
+        do_something1(data)
+        do_something2(data)
 ```
 
 ```py
-for d in data:
-    if not d:
-        continue
+def do_all(data):
+    if not data:
+        return
     do_something1(d)
     do_something2(d)
 ```
@@ -180,26 +180,26 @@ for d in data:
 
 ### 早期リターン②
 
-* 条件が増えると目も当てられない
+* 条件が増えると無用な diff が増える
 
 ```diff
- for d in data:
-    if d:
--       do_something1(d)
--       do_something2(d)
-+       if d.prop == 'hoge':
-+            do_something1(x)
-+            do_something2(x)
+ def do_all(data)
+     if data:
+-        do_something1(data)
+-        do_something2(data)
++        if data.prop == 'hoge':
++            do_something1(data)
++            do_something2(data)
 ```
 
 ```diff
-for d in data:
-    if not d:
-        continue
-+    if d.prop != 'hoge':
-+        continue
-    do_something1(d)
-    do_something2(d)
+ def do_all(data):
+     if not data:
+         return
++    if data.prop != 'hoge':
++        return
+     do_something1(d)
+     do_something2(d)
 ```
 
 ---
@@ -245,6 +245,24 @@ def get_profile(user_id):
     return do_something(user_id)
 ```
 
++++
+
+### `login_required` の実装
+
+```py
+def login_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if request.method in EXEMPT_METHODS:
+            return func(*args, **kwargs)
+        elif current_app.config.get('LOGIN_DISABLED'):
+            return func(*args, **kwargs)
+        elif not current_user.is_authenticated:
+            return current_app.login_manager.unauthorized()
+        return func(*args, **kwargs)
+    return decorated_view
+```
+
 ---
 
 他にも Mixin や Context Manager など・・・
@@ -253,12 +271,107 @@ def get_profile(user_id):
 
 ## Zen of Python にたどり着く
 
-
 Tim Peters 氏が示した Python 設計 19 の指針
 
 ```python
 import this
 ```
+
++++
+
+## Zen of Python （訳：多田）
+
++++
+
+* Beautiful is better than ugly.
+
+    醜いよりも美しい方が良い。
+
+* Explicit is better than implicit.
+
+    暗黙的であるよりも明示的であるほうが良い。
+
+* Simple is better than complex.
+
+    複雑であるよりも単純な方が良い。
+
+* Complex is better than complicated.
+
+    それでも、難解であるよりは複雑な方がマシ。
+
++++
+
+* Flat is better than nested.
+
+    入れ子状になるよりも凹凸のない方が良い。
+
+* Sparse is better than dense.
+
+    ぎっしりつまっているより空いていたほうが良い。
+
+* Readability counts.
+
+    可読性はすごく重要。
+
++++
+
+* Special cases aren't special enough to break the rules.
+
+    特例だったとしてもルールを破ってよいほど特別というわけではない。
+
+* Although practicality beats purity.
+
+    とはいえ、実用性は純正であることに勝る。
+
++++
+
+* Errors should never pass silently.
+
+    エラーを黙って見過ごすべきではない。
+
+* Unless explicitly silenced.
+
+    ただし明示的に黙らせている場合は除く。
+
+* In the face of ambiguity, refuse the temptation to guess.
+
+    あいまいなものに直面したときは、憶測で済ませたくなる誘惑をはねのけること
+
++++
+
+* There should be one-- and preferably only one --obvious way to do it.
+
+    明らかなやり方が――好ましくはたったひとつだけ――あるはずだ。
+
+* Although that way may not be obvious at first unless you're Dutch.
+
+    けれどもそのやり方が、最初は明快ではないかもしれない。君がオランダ人でないならね。
+
++++
+
+* Now is better than never.
+
+    ずっとやらないよりは今やったほうがいい。
+
+* Although never is often better than *right* now.
+
+    けれど *今すぐ* やるよりは一生やらないほうがマシなこともよくある。
+
++++
+
+* If the implementation is hard to explain, it's a bad idea.
+
+    実装の説明が難しいなら、そのアイデアはイケてない。
+
+* If the implementation is easy to explain, it may be a good idea.
+
+    実装の説明が簡単なら、いい感じだ。たぶんきっと。
+
++++
+
+* Namespaces are one honking great idea -- let's do more of those!
+
+    名前空間はマジでイケてる -- ガンガン使っていこう！
 
 ---
 
@@ -293,7 +406,7 @@ diff 最小化原理は良い指針になるのでは？
 
 ### 結論
 
-diff 最小化原理で **良い** コードを書こう
+diff 最小化原理で **いいコード** を書こう
 
 ---
 
@@ -307,123 +420,3 @@ diff 最小化原理で **良い** コードを書こう
 長いものには巻かれよう！
 
 ![alt](https://www.python.org/static/img/python-logo.png)
-
----
-
-## 付録
-
----
-
-### login_required の中身
-
-```py
-def login_required(func):
-    ...
-    @wraps(func)
-    def decorated_view(*args, **kwargs):
-        if request.method in EXEMPT_METHODS:
-            return func(*args, **kwargs)
-        elif current_app.login_manager._login_disabled:
-            return func(*args, **kwargs)
-        elif not current_user.is_authenticated:
-            return current_app.login_manager.unauthorized()
-        return func(*args, **kwargs)
-    return decorated_view
-
-```
-
----
-
-## Zen of Python （訳：多田）
-
----
-
-* Beautiful is better than ugly.
-
-    醜いよりも美しい方が良い。
-
-* Explicit is better than implicit.
-
-    暗黙的であるよりも明示的であるほうが良い。
-
-* Simple is better than complex.
-
-    複雑であるよりも単純な方が良い。
-
-* Complex is better than complicated.
-
-    それでも、難解であるよりは複雑な方がマシ。
-
----
-
-* Flat is better than nested.
-
-    入れ子状になるよりも凹凸のない方が良い。
-
-* Sparse is better than dense.
-
-    ぎっしりつまっているより空いていたほうが良い。
-
-* Readability counts.
-
-    可読性はすごく重要。
-
----
-
-* Special cases aren't special enough to break the rules.
-
-    特例だったとしてもルールを破ってよいほど特別というわけではない。
-
-* Although practicality beats purity.
-
-    とはいえ、実用性は純正であることに勝る。
-
----
-
-* Errors should never pass silently.
-
-    エラーを黙って見過ごすべきではない。
-
-* Unless explicitly silenced.
-
-    ただし明示的に黙らせている場合は除く。
-
-* In the face of ambiguity, refuse the temptation to guess.
-
-    あいまいなものに直面したときは、憶測で済ませたくなる誘惑をはねのけること
-
----
-
-* There should be one-- and preferably only one --obvious way to do it.
-
-    明らかなやり方が――好ましくはたったひとつだけ――あるはずだ。
-
-* Although that way may not be obvious at first unless you're Dutch.
-
-    けれどもそのやり方が、最初は明快ではないかもしれない。君がオランダ人でないならね。
-
----
-
-* Now is better than never.
-
-    ずっとやらないよりは今やったほうがいい。
-
-* Although never is often better than *right* now.
-
-    けれど *今すぐ* やるよりは一生やらないほうがマシなこともよくある。
-
----
-
-* If the implementation is hard to explain, it's a bad idea.
-
-    実装の説明が難しいなら、そのアイデアはイケてない。
-
-* If the implementation is easy to explain, it may be a good idea.
-
-    実装の説明が簡単なら、いい感じだ。たぶんきっと。
-
----
-
-* Namespaces are one honking great idea -- let's do more of those!
-
-    名前空間はマジでイケてる -- ガンガン使っていこう！
